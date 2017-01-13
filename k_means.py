@@ -26,12 +26,20 @@ fig = plt.figure(figsize=(8, 3))
 
 fig.suptitle('Cluster Center Images', fontsize=14, fontweight='bold')
 
-for i in range(10):
-    # Initialize subplots in a grid of 2X5, at i+1th position
-    ax = fig.add_subplot(2, 5, 1 + i)
-    # Display images
-    ax.imshow(clf.cluster_centers_[i].reshape((8, 8)), cmap=plt.cm.binary)
-    # Don't show the axes
-    plt.axis('off')
+# for i in range(10):
+#     # Initialize subplots in a grid of 2X5, at i+1th position
+#     ax = fig.add_subplot(2, 5, 1 + i)
+#     # Display images
+#     ax.imshow(clf.cluster_centers_[i].reshape((8, 8)), cmap=plt.cm.binary)
+#     # Don't show the axes
+#     plt.axis('off')
+#
+# plt.show()
 
-plt.show()
+y_pred = clf.predict(X_test)
+
+print(y_pred[:100])
+
+print(y_test[:100])
+
+print(clf.cluster_centers_.shape)
