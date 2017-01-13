@@ -1,10 +1,11 @@
 # Import
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import cluster
 from sklearn import datasets
+from sklearn import metrics
 from sklearn.cross_validation import train_test_split
-from sklearn.manifold import Isomap
+from sklearn.metrics import homogeneity_score, completeness_score, v_measure_score, adjusted_rand_score, \
+    adjusted_mutual_info_score, silhouette_score
 from sklearn.preprocessing import scale
 
 digits = datasets.load_digits()
@@ -45,18 +46,30 @@ print(y_test[:100])
 
 print(clf.cluster_centers_.shape)
 
-X_iso = Isomap(n_neighbors=10).fit_transform(X_train)
+# X_iso = Isomap(n_neighbors=10).fit_transform(X_train)
+#
+# clusters = clf.fit_predict(X_train)
+#
+# fig, ax = plt.subplots(1, 2, figsize=(8, 4))
+#
+# fig.suptitle('Predicted Versus Training Labels', fontsize=14, fontweight='bold')
+# fig.subplots_adjust(top=0.85)
+#
+# ax[0].scatter(X_iso[:, 0], X_iso[:, 1], c=clusters)
+# ax[0].set_title('Predicted Training Labels')
+# ax[1].scatter(X_iso[:, 0], X_iso[:, 1], c=y_train)
+# ax[1].set_title('Actual Training Labels')
+#
+# plt.show()
 
-clusters = clf.fit_predict(X_train)
+print(metrics.confusion_matrix(y_test, y_pred))
 
-fig, ax = plt.subplots(1, 2, figsize=(8, 4))
-
-fig.suptitle('Predicted Versus Training Labels', fontsize=14, fontweight='bold')
-fig.subplots_adjust(top=0.85)
-
-ax[0].scatter(X_iso[:, 0], X_iso[:, 1], c=clusters)
-ax[0].set_title('Predicted Training Labels')
-ax[1].scatter(X_iso[:, 0], X_iso[:, 1], c=y_train)
-ax[1].set_title('Actual Training Labels')
-
-plt.show()
+print('% 9s' % 'inertia    homo   compl  v-meas     ARI AMI  silhouette')
+print('%i   %.3f   %.3f   %.3f   %.3f   %.3f    %.3f'
+      % (clf.inertia_,
+         homogeneity_score(y_test, y_pred),
+         completeness_score(y_test, y_pred),
+         v_measure_score(y_test, y_pred),
+         adjusted_rand_score(y_test, y_pred),
+         adjusted_mutual_info_score(y_test, y_pred),
+         silhouette_score(X_test, y_pred, metric='euclidean')))
